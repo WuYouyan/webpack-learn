@@ -1,1 +1,2 @@
-console.log('hello world');
+const name = require('./a.js');
+console.log('hello '+ name);
