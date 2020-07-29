@@ -1,0 +1,5 @@
+@import './a.css';
+
+body {
+    background-image: linear-gradient(#c5c5c5, #f9f9fa);
+}
