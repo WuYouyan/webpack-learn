@@ -25,6 +25,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // extract css 
 const OptimizeCssAssetsPlugin  = require('optimize-css-assets-webpack-plugin'); // minify css file to one line
 
 const TerserWebpackPlugin = require('terser-webpack-plugin'); //  minify javascript, uglifyjs-webpack-plugin is replaced by terser-webpack-plugin
+const { options } = require('less');
 
 module.exports = {
     optimization: { // optimization items
@@ -67,6 +68,22 @@ module.exports = {
     ],
     module: {
         rules:[
+            {
+                test:/\.js$/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: { // use babel-loader need to convert es6 to es5
+                        presets: [
+                            '@babel/preset-env'
+                        ],
+                        plugins: [
+                            ["@babel/plugin-proposal-decorators", { "legacy": true }],  // enable decorator, check babel website
+                            ["@babel/plugin-proposal-class-properties", { "loose" : true }] // enable es6 class property, check babel website
+                        ]
+                    }
+                }] 
+                
+            },
             {
                 test:/\.css$/,
                 use: [
