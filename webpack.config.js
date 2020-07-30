@@ -20,7 +20,23 @@ const insertAtTop = function(element) {
     window._lastElementInsertedByStyleLoader = element;
   }
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // extract css from js file to a link tag 
+
+const OptimizeCssAssetsPlugin  = require('optimize-css-assets-webpack-plugin'); // minify css file to one line
+
+const TerserWebpackPlugin = require('terser-webpack-plugin'); //  minify javascript, uglifyjs-webpack-plugin is replaced by terser-webpack-plugin
+
 module.exports = {
+    optimization: { // optimization items
+        minimize: true,
+        minimizer: [
+            new TerserWebpackPlugin({ // minify JavaScript
+                cache: true,
+                parallel:true,
+                sourceMap: true
+            })
+        ]
+    },
     /* devServer: { // configuration of webpack-dev-server
         port: 3000,
         progress:true,
@@ -43,34 +59,30 @@ module.exports = {
                 collapseWhitespace: true, // collapse whitespace, make html file into one line
             }, */
             hash: true // add hash to js version
-        })
+        }),
+        new MiniCssExtractPlugin({
+            filename: 'main.[hash:8].css'
+        }),
+        new OptimizeCssAssetsPlugin() // minify css to one line
     ],
     module: {
         rules:[
             {
                 test:/\.css$/,
                 use: [
-                    {
-                        loader: 'style-loader',
-                        options: { 
-                            insert: insertAtTop //insert css to html's head
-                        }
-                    },
-                    'css-loader' //@import 
+                    MiniCssExtractPlugin.loader, // extract css from js file to the css file
+                    'css-loader', //@import 
+                    'postcss-loader', // add web browser prefix
                 ] 
                 
             },
             {
                 test:/\.less$/, // can process less, the same sass stylus..
                 use: [
-                    {
-                        loader: 'style-loader',
-                        options: {
-                            insert:  insertAtTop //insert css to html's head
-                        }
-                    },
+                    MiniCssExtractPlugin.loader, // extract css from js file to the css file
                     'css-loader',//@import 
-                    'less-loader' // less->css
+                    'less-loader', // less->css
+                    'postcss-loader', // add web browser prefix
                 ] 
             }
         ]
