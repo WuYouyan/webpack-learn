@@ -69,8 +69,16 @@ module.exports = {
     module: {
         rules:[
             {
-                test:/\.js$/,
-                use: [{
+                test: /\.js$/,
+                enforce:'pre', // bring forward eslint-loader (rule order from bot to top, right to left)
+                exclude: /node_modules/,
+                use: {
+                    loader: 'eslint-loader'// https://eslint.org/demo for eslint config file .eslintrc.json
+                },
+            },
+            {
+                test:/\.js$/,   
+                use: [{ // enforce:'normal'
                     loader: 'babel-loader',
                     options: { // use babel-loader need to convert es6 to es5
                         presets: [
@@ -78,11 +86,13 @@ module.exports = {
                         ],
                         plugins: [
                             ["@babel/plugin-proposal-decorators", { "legacy": true }],  // enable decorator, check babel website
-                            ["@babel/plugin-proposal-class-properties", { "loose" : true }] // enable es6 class property, check babel website
+                            ["@babel/plugin-proposal-class-properties", { "loose" : true }], // enable es6 class property, check babel website
+                            "@babel/plugin-transform-runtime"
                         ]
-                    }
-                }] 
-                
+                    },
+                }],
+                include: path.resolve(__dirname,'src'),
+                exclude: /node_modules/
             },
             {
                 test:/\.css$/,
