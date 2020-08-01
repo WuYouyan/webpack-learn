@@ -1,5 +1,11 @@
 @import './a.css';
 
 body {
-    background-image: linear-gradient(#c5c5c5, #f9f9fa);
+    background-color: linear-gradient(#c5c5c5, #f9f9fa);
+}
+
+#es6 {
+    width: 245px;
+    height: 140px;
+    background-image: url('./logo.png');
 }

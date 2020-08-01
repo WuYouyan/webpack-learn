@@ -2,24 +2,6 @@
 const path = require('path'); // path.resolve() convert relative path to absolute path
 const HtmlWebpackPlugin = require('html-webpack-plugin'); // associate html with js file
 
-const insertAtTop = function(element) {
-    var parent = document.querySelector('head');
-    // eslint-disable-next-line no-underscore-dangle
-    var lastInsertedElement =
-      window._lastElementInsertedByStyleLoader;
-
-    if (!lastInsertedElement) {
-      parent.insertBefore(element, parent.firstChild);
-    } else if (lastInsertedElement.nextSibling) {
-      parent.insertBefore(element, lastInsertedElement.nextSibling);
-    } else {
-      parent.appendChild(element);
-    }
-
-    // eslint-disable-next-line no-underscore-dangle
-    window._lastElementInsertedByStyleLoader = element;
-  }
-
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // extract css from js file to a link tag 
 
 const OptimizeCssAssetsPlugin  = require('optimize-css-assets-webpack-plugin'); // minify css file to one line
@@ -66,22 +48,41 @@ module.exports = {
             filename: 'main.[hash:8].css'
         }),
         new OptimizeCssAssetsPlugin(), // minify css to one line
-        new webpack.ProvidePlugin({ // inject jquery as $ in each module 
-            $: 'jquery'
-        })
     ],
-    externals: {
-        jquery: '$' // do not packaging jquery from local node_modules, bundle.js from 300+ KB to 2KB
-    },
     module: {
         rules:[
-            // { //jquery configuration
-            //     test: require.resolve('jquery'),
-            //     loader: 'expose-loader',
-            //     options: {
-            //       exposes: ['$', 'jQuery'],
-            //     },
-            // },
+            {
+                test: /\.html$/i,
+                loader: 'html-loader',
+                options: {
+                    attributes: {
+                      list: [
+                        {
+                          tag: 'img',
+                          attribute: 'src',
+                          type: 'src',
+                        },
+                      ]
+                    }
+                }
+            },
+            {
+                test:/\.(png|jpg|gif)$/,
+                use: [
+                    {
+                        loader: 'url-loader', // transforms files into base64 URIs.
+                        options: {
+                            limit: 36*1 // if bigger size it will use as file-loader
+                        }
+                    },
+                    // {
+                    //     loader: 'file-loader',
+                    //     options: {
+                    //         name: '[path][name].[ext]',
+                    //     }
+                    // } 
+                ],
+            },
             {
                 test:/\.js$/,   
                 use: [{ // enforce:'normal'
@@ -107,7 +108,6 @@ module.exports = {
                     'css-loader', //@import 
                     'postcss-loader', // add web browser prefix
                 ] 
-                
             },
             {
                 test:/\.less$/, // can process less, the same sass stylus..

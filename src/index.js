@@ -1,9 +1,13 @@
-// import $ from 'expose-loader?exposes[]=$!jquery'; // inline loader, check npmjs expose-loader for usage
-// import $ from 'jquery'; 
-//expose-loader: expose jquery to global, inline loader,  // loader type pre normal inline post
-import $ from 'jquery';
-// 1. expose-loader : expose to global
-// 2. webpack.ProvidePlugin: configure jquery for every module
-// 3. script link jquery CDN,  import jquery but not packaging (jquery)
-console.log($);
-console.log('window.$: ',window.$); // jquery has been exposed to window (global scope)
+// imgae
+// 1. js import image
+// 2. css: background('url') import imge
+// 3. <img src="" alt="">
+
+// file-loader, by default, it will generate a new image in our build directory
+import './index.css';
+import logo from './logo.png'; // import image, return a new image address
+console.log("logo", logo);
+
+let img = new Image();
+img.src=logo;
+document.body.appendChild(img);
