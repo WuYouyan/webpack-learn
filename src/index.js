@@ -1,25 +1,9 @@
-const name = require('./a.js');
-console.log('hello '+ name);
-require('./index.css');
-require('./index.less');
-
-let fn = () => {
-    let el = document.getElementById('es6');
-    el.innerText = 'hello es6 with babel';
-    console.log('babel');
-}
-
-fn();
-
-@log
-class A {
-    a;
-    constructor(){
-        this.a =1;
-    }
-} 
-function log(target) {
-    console.log('Decorator -> log -> new ',target.prototype.constructor.name+'()');
-}
-
-console.log("new A().a: ", new A().a)
+// import $ from 'expose-loader?exposes[]=$!jquery'; // inline loader, check npmjs expose-loader for usage
+// import $ from 'jquery'; 
+//expose-loader: expose jquery to global, inline loader,  // loader type pre normal inline post
+import $ from 'jquery';
+// 1. expose-loader : expose to global
+// 2. webpack.ProvidePlugin: configure jquery for every module
+// 3. script link jquery CDN,  import jquery but not packaging (jquery)
+console.log($);
+console.log('window.$: ',window.$); // jquery has been exposed to window (global scope)

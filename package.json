@@ -36,6 +36,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.10.4",
-    "@babel/runtime": "^7.10.5"
+    "@babel/runtime": "^7.10.5",
+    "expose-loader": "^1.0.0",
+    "jquery": "^3.5.1"
   }
 }

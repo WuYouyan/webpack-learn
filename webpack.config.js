@@ -25,7 +25,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // extract css 
 const OptimizeCssAssetsPlugin  = require('optimize-css-assets-webpack-plugin'); // minify css file to one line
 
 const TerserWebpackPlugin = require('terser-webpack-plugin'); //  minify javascript, uglifyjs-webpack-plugin is replaced by terser-webpack-plugin
-const { options } = require('less');
+
+const webpack = require('webpack');
 
 module.exports = {
     optimization: { // optimization items
@@ -64,18 +65,23 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'main.[hash:8].css'
         }),
-        new OptimizeCssAssetsPlugin() // minify css to one line
+        new OptimizeCssAssetsPlugin(), // minify css to one line
+        new webpack.ProvidePlugin({ // inject jquery as $ in each module 
+            $: 'jquery'
+        })
     ],
+    externals: {
+        jquery: '$' // do not packaging jquery from local node_modules, bundle.js from 300+ KB to 2KB
+    },
     module: {
         rules:[
-            {
-                test: /\.js$/,
-                enforce:'pre', // bring forward eslint-loader (rule order from bot to top, right to left)
-                exclude: /node_modules/,
-                use: {
-                    loader: 'eslint-loader'// https://eslint.org/demo for eslint config file .eslintrc.json
-                },
-            },
+            // { //jquery configuration
+            //     test: require.resolve('jquery'),
+            //     loader: 'expose-loader',
+            //     options: {
+            //       exposes: ['$', 'jQuery'],
+            //     },
+            // },
             {
                 test:/\.js$/,   
                 use: [{ // enforce:'normal'
