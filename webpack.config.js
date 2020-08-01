@@ -32,7 +32,7 @@ module.exports = {
     output: { // output file
         filename: 'bundle.[hash:8].js', // the name of package file
         path: path.resolve(__dirname,'dist'), // output file to be placed, must be a absolute path
-                                        
+        // publicPath: 'http://www.learn-webpack.com' // add prefix to resources src for CDN
     }, 
     plugins: [
         new HtmlWebpackPlugin({
@@ -45,7 +45,7 @@ module.exports = {
             hash: true // add hash to js version
         }),
         new MiniCssExtractPlugin({
-            filename: 'main.[hash:8].css'
+            filename: 'css/main.[hash:8].css'
         }),
         new OptimizeCssAssetsPlugin(), // minify css to one line
     ],
@@ -72,7 +72,9 @@ module.exports = {
                     {
                         loader: 'url-loader', // transforms files into base64 URIs.
                         options: {
-                            limit: 36*1 // if bigger size it will use as file-loader
+                            limit: 36*10, // if bigger size it will use as file-loader
+                            outputPath: '/img/',
+                            publicPath: 'http://www.learn-webpack.com' // for CDN
                         }
                     },
                     // {
