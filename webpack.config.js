@@ -2,22 +2,20 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    mode: 'development', //development, production
-    entry: { // multiple entry
+    mode: 'development', 
+    entry: {
         home: './src/index.js',
+    },
+    watch: true,  // watch build 
+    watchOptions: {
+        poll: 1000, // watch every 1000 ms
+        aggregateTimeout: 1000, // debounce time
+        ignored: /node_modules/ // ignore files
     },
     output: {
         filename: '[name].[hash:6].js',
         path: path.resolve(__dirname, 'dist')
     },
-    // 1) source-map will generate separately a source map file, will report the position of error 
-    // devtool: 'source-map', // add map file, help debugging
-    // 2) eval-source-map, will not generate a source map file but alse report the position 
-    // devtool: 'eval-source-map', // add map file, help debugging
-    // 3) 'eval-source-map' will generate a map file(not show position of error), can be kept
-    // devtool: 'cheap-module-source-map', // add map file, help debugging
-    // 4) will not generate file, will be integrated in packaging file(will not show position of error)
-    devtool: 'cheap-module-eval-source-map', 
     module: {
         rules: [
             {

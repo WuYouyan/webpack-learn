@@ -2,7 +2,7 @@ console.log('index');
 
 class Log {
     constructor(){
-        console.lo("Log -> constructor -> constructor");
+        console.log("Log -> constructor -> constructor");
     }
 }
 
