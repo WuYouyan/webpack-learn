@@ -8,6 +8,29 @@ const webpack = require('webpack');
 // 2. copy-webpack-plugin  // copy files to build directory
 // 3. banner-webpack-plugin (built-in) // add copy right
 module.exports = {
+    devServer:{
+        port: 8080,
+        progress:true,
+        contentBase: './dist',
+        compress:true, //compress files gzip
+        // 1
+        // proxy: {
+        //     // '/api': 'http://localhost:3000' 
+        //     '/api': { //     
+        //         target: 'http://localhost:3000',
+        //         pathRewrite: {
+        //             'api': '' // will transfer api/user -> /user to http://localhost:3000
+        //         }
+        //     }
+        // },
+        // 2 mock data
+        // before(app){ // hooks 
+        //     app.get('/user', (req, res) => {
+        //         res.json({name: 'learn webpack - before'});
+        //     });
+        // }
+        // 3 server without using proxy, bootstrap webpack in server and port using server port
+    },
     mode: 'development', 
     entry: {
         home: './src/index.js',
@@ -33,14 +56,14 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './index.html',
-            filename: 'home.html',
+            filename: 'index.html',
         }),
-        new CleanWebpackPlugin(), 
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: './doc', to: './doc' },
-              ],
-        }),
-        new webpack.BannerPlugin('Make 2019 by yy')
+        // new CleanWebpackPlugin(), 
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         { from: './doc', to: './doc' },
+        //       ],
+        // }),
+        // new webpack.BannerPlugin('Make 2019 by yy')
     ]
 }
