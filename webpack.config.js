@@ -1,21 +1,22 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
+// 1. clean-webpack-plugin // remove previous build automatically
+// 2. copy-webpack-plugin  // copy files to build directory
+// 3. banner-webpack-plugin (built-in) // add copy right
 module.exports = {
     mode: 'development', 
     entry: {
         home: './src/index.js',
     },
-    watch: true,  // watch build 
-    watchOptions: {
-        poll: 1000, // watch every 1000 ms
-        aggregateTimeout: 1000, // debounce time
-        ignored: /node_modules/ // ignore files
-    },
     output: {
         filename: '[name].[hash:6].js',
         path: path.resolve(__dirname, 'dist')
     },
+
     module: {
         rules: [
             {
@@ -32,7 +33,14 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './index.html',
-            filename: 'index.html',
+            filename: 'home.html',
         }),
+        new CleanWebpackPlugin(), 
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: './doc', to: './doc' },
+              ],
+        }),
+        new webpack.BannerPlugin('Make 2019 by yy')
     ]
 }
