@@ -1,35 +1,24 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const webpack = require('webpack');
 
-// 1. clean-webpack-plugin // remove previous build automatically
-// 2. copy-webpack-plugin  // copy files to build directory
-// 3. banner-webpack-plugin (built-in) // add copy right
 module.exports = {
+    resolve:{
+        modules: [
+            path.resolve('node_modules'),
+            // path.resolve('dist') // 1
+        ],
+        // alias: { // 2
+        //     bootstrap: 'bootstrap/dist/css/bootstrap.css'
+        // }
+        // mainFields:['style', 'main'] // 3 in node_modules/ .../package.json
+        // mainFiles: [] // 4, entry file index.js by default
+        extensions: ['.js', '.css', '.json'] // 5 import 'style', will search at first style.js then style.css and then json, once find, return  
+    },
     devServer:{
         port: 8080,
         progress:true,
         contentBase: './dist',
         compress:true, //compress files gzip
-        // 1
-        // proxy: {
-        //     // '/api': 'http://localhost:3000' 
-        //     '/api': { //     
-        //         target: 'http://localhost:3000',
-        //         pathRewrite: {
-        //             'api': '' // will transfer api/user -> /user to http://localhost:3000
-        //         }
-        //     }
-        // },
-        // 2 mock data
-        // before(app){ // hooks 
-        //     app.get('/user', (req, res) => {
-        //         res.json({name: 'learn webpack - before'});
-        //     });
-        // }
-        // 3 server without using proxy, bootstrap webpack in server and port using server port
     },
     mode: 'development', 
     entry: {
@@ -42,6 +31,10 @@ module.exports = {
 
     module: {
         rules: [
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
+            },
             {
                 test:/\.js$/,
                 use: {
@@ -58,12 +51,5 @@ module.exports = {
             template: './index.html',
             filename: 'index.html',
         }),
-        // new CleanWebpackPlugin(), 
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         { from: './doc', to: './doc' },
-        //       ],
-        // }),
-        // new webpack.BannerPlugin('Make 2019 by yy')
     ]
 }
