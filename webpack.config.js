@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const webpack = require('webpack');
+
 module.exports = {
     resolve:{
         modules: [
@@ -47,6 +49,14 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            // DEV: "'dev'"
+            // DEV: "'production'"
+            DEV: JSON.stringify('production'),
+            FLAG: 'true',
+            EXPRESSION: '1+1', //  console.log(EXPRESSION) -> 2
+            EXPRESSION1: JSON.stringify('1+1') //  console.log(EXPRESSION1) -> 1+1
+        }),
         new HtmlWebpackPlugin({
             template: './index.html',
             filename: 'index.html',
