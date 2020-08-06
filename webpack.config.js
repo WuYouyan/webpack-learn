@@ -6,6 +6,11 @@ const webpack = require('webpack');
 module.exports = {
     mode:'development',
     entry: './src/index.js',
+    devServer: {
+        port: 3000,
+        open: true,
+        contentBase: './dist'
+    },
     module: {
         noParse: /jquery/, // do not resolve jquery's dependency repository
         rules: [
@@ -30,10 +35,13 @@ module.exports = {
         path: path.resolve(__dirname, 'dist')
     },
     plugins: [
+        new webpack.DllReferencePlugin({ // will check manifest first, if not find, will packaging required modules
+            manifest: path.resolve(__dirname, 'dist', 'manifest.json')
+        }),
         // when load 'moment' ignore 'locale/'
         new webpack.IgnorePlugin(/\.\/locale/, /moment/), // do not packaging all language modules from 'locale/'
         new HtmlWebpackPlugin({
-            template: './src/index.html',
+            template: './public/index.html',
             filename: 'index.html',
         })
     ]

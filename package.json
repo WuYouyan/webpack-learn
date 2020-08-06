@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "build-react": "npx webpack --config webpack.config.react.js",
     "build": "npx webpack --config webpack.config.js",
     "dev": "webpack-dev-server --open"
   },
@@ -19,6 +20,8 @@
   },
   "dependencies": {
     "jquery": "^3.5.1",
-    "moment": "^2.27.0"
+    "moment": "^2.27.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   }
 }
