@@ -2,7 +2,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-
+// happypack : multi thread packaging
+const Happypack = require('happypack');
 module.exports = {
     mode:'development',
     entry: './src/index.js',
@@ -18,15 +19,12 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/, // packaging optimization
                 include: path.resolve('src'), // packaging optimization
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [
-                            '@babel/preset-env',
-                            '@babel/preset-react'
-                        ]
-                    }
-                }
+                use: 'Happypack/loader?id=js'
+            },
+            {
+                test: /\.css$/,
+                // use: ['style-loader', 'css-loader'],
+                use: 'Happypack/loader?id=css'
             }
         ]
     },
@@ -35,6 +33,24 @@ module.exports = {
         path: path.resolve(__dirname, 'dist')
     },
     plugins: [
+        new Happypack({
+            id: 'css',
+            use: ['style-loader', 'css-loader']
+        }),
+        new Happypack({
+            id: 'js',
+            use: [
+                {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            '@babel/preset-env',
+                            '@babel/preset-react'
+                        ]
+                    }
+                }
+            ]
+        }),
         new webpack.DllReferencePlugin({ // will check manifest first, if not find, will packaging required modules
             manifest: path.resolve(__dirname, 'dist', 'manifest.json')
         }),
