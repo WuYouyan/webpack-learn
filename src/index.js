@@ -1,5 +1,13 @@
-import React from 'react'; //  use DllPlugin and DllReferencePlugin to extract react and react-dom to a js file 
-import { render } from 'react-dom'; // do not package react and react-dom every time, import from _dll_react.js instead
+import calc from './test.js'; // tree-shaking, in mode 'production' will remove unused code 
 
+// es6 module will put imported result in default property
+// let calc = require('./test').default;
 
-render(<h1>jsx</h1>, window.root);
+console.log(calc.sum(1,2));
+
+// scope hoisting
+let a = 1;
+let b = 1;
+let c = 1;
+let d = a+b+c; // will be optimized to 6 directly in  webpakck production mode
+console.log("d", d)
