@@ -5,9 +5,30 @@ const webpack = require('webpack');
 
 
 module.exports = {
-    mode:'development',
-    // mode:'production',
-    entry: './src/index.js',
+    optimization: { // commonChunkPlugins before webpack 4
+        splitChunks: {
+            cacheGroups: { // extract order: from top to bottom
+                common: {
+                    chunks: 'initial',
+                    minSize: 0, // when code size exceeds 0 size, extract common code
+                    minChunks: 1 // common code is used by 1 more chunks, extract common code
+                },
+                vendor: { // third party module like jquery
+                    priority: 1, // extract third party module first 
+                    test: /node_modules/,
+                    chunks: 'initial',
+                    minSize: 0, // when code size exceeds 0 size, extract common code
+                    minChunks: 1 // common code is used by 1 more chunks, extract common code
+                }
+            }
+        }
+    },
+    // mode:'development',
+    mode:'production',
+    entry: {
+        index: './src/index.js',
+        other: './src/other.js'
+    },
     devServer: {
         port: 3000,
         open: true,
@@ -40,7 +61,7 @@ module.exports = {
         ]
     },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
     plugins: [
