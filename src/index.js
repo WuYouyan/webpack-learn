@@ -1,14 +1,9 @@
-let button = document.createElement('button');
-
-// lazy load
-button.addEventListener('click', function(param){
-    console.log('paramL ', param);
-    // es6 jsonp realise dynamic loading
-    import('./source.js').then(data => {
-        console.log("data: ", data.default);
+import str from './source';
+console.log("str: ", str)
+if (module.hot) {
+    module.hot.accept('./source', () => {
+        console.log('file is updated');
+        let str = require('./source').default;// or configure babel.config.json 
+        console.log("str", str);
     })
-});
-
-button.innerText = 'click';
-
-document.body.appendChild(button);
+}

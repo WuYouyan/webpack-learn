@@ -11,6 +11,7 @@ module.exports = {
         index: './src/index.js',
     },
     devServer: {
+        hot: true, // activate hot updation
         port: 3000,
         open: true,
         contentBase: './dist'
@@ -49,6 +50,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './public/index.html',
             filename: 'index.html',
-        })
+        }),
+        new webpack.NamedModulesPlugin(), // print updated module path
+        new webpack.HotModuleReplacementPlugin(), // hot updation plugin
     ]
 }
