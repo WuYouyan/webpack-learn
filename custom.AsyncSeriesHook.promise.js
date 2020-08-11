@@ -1,10 +1,5 @@
-/* 
-    3 types registration function:
-    1.  tap -> call()
-    2.  tapAsync -> callAsync()
-    3.  tapPromise -> promise().then()
-*/
-class AsyncParallelHook { // asynchronous hook
+
+class AsyncSeriesHook { // asynchronous hook
     constructor(args){
         this.tasks = [];
     }
@@ -12,27 +7,29 @@ class AsyncParallelHook { // asynchronous hook
         this.tasks.push(task);
     }
     promise(...args) {
-        let tasks = this.tasks.map(task=> task(...args));
-        return Promise.all(tasks);
+        let [first, ...rest] = this.tasks;
+        return rest.reduce((p,n)=>p.then(()=>n(...args)), first(...args));
     }
 }
 
-let hook = new AsyncParallelHook(['name']);
+let hook = new AsyncSeriesHook(['name']);
 hook.tapPromise('node', name => {
-    return new Promise( (res,rej)=>{
+    return new Promise((res,rej)=>{
         setTimeout(()=>{
             console.log("node :", name);
             res();
         }, 1000);
-    })
+
+    });
 });
 hook.tapPromise('react', name => {
-    return new Promise( (res,rej)=>{
+    return new Promise((res,rej)=>{
         setTimeout(()=>{
             console.log("react :", name);
             res();
-        }, 3000);
-    })
+        }, 1000);
+
+    });
 });
 
 hook.promise('hello').then(() => 
